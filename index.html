@@ -1,0 +1,1333 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Instrumen Pemantauan MPLS 2026 - SMP Kota Kediri</title>
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body { 
+  background: #f5f7fa; 
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  padding: 20px;
+}
+.container { max-width: 1400px; margin: 0 auto; }
+.header {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  padding: 30px;
+  border-radius: 15px;
+  text-align: center;
+  margin-bottom: 30px;
+}
+.header h1 { font-size: 26px; margin-bottom: 10px; }
+.header p { font-size: 14px; opacity: 0.9; }
+
+.card {
+  background: white;
+  padding: 25px;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+  margin-bottom: 25px;
+}
+.card h2 {
+  color: #667eea;
+  font-size: 20px;
+  margin-bottom: 20px;
+  padding-bottom: 12px;
+  border-bottom: 3px solid #667eea;
+}
+
+.form-section {
+  background: #f9fafb;
+  padding: 20px;
+  border-radius: 10px;
+  margin-bottom: 20px;
+  border-left: 4px solid #667eea;
+}
+.form-section h3 {
+  color: #1f2937;
+  font-size: 16px;
+  margin-bottom: 15px;
+}
+
+.form-row {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 15px;
+  margin-bottom: 15px;
+}
+.form-group { margin-bottom: 15px; }
+.form-group label {
+  display: block;
+  margin-bottom: 6px;
+  color: #374151;
+  font-weight: 600;
+  font-size: 13px;
+}
+.form-group input,
+.form-group select,
+.form-group textarea {
+  width: 100%;
+  padding: 10px 12px;
+  border: 2px solid #e5e7eb;
+  border-radius: 8px;
+  font-size: 13px;
+  transition: all 0.3s;
+}
+.form-group input:focus,
+.form-group select:focus,
+.form-group textarea:focus {
+  outline: none;
+  border-color: #667eea;
+  box-shadow: 0 0 0 3px rgba(102,126,234,0.1);
+}
+.form-group textarea { resize: vertical; min-height: 80px; }
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 15px 0;
+}
+table th {
+  background: linear-gradient(135deg, #667eea, #764ba2);
+  color: white;
+  padding: 12px;
+  text-align: left;
+  font-size: 13px;
+  font-weight: 600;
+}
+table td {
+  padding: 12px;
+  border-bottom: 1px solid #e5e7eb;
+  font-size: 13px;
+  vertical-align: top;
+}
+table tr:hover { background: #f9fafb; }
+
+.checkbox-group {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: 8px 0;
+}
+.checkbox-group input[type="checkbox"] {
+  width: 18px;
+  height: 18px;
+  cursor: pointer;
+}
+.checkbox-group label {
+  font-size: 13px;
+  color: #374151;
+  cursor: pointer;
+}
+
+.rating-group {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+.rating-option {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  padding: 6px 12px;
+  background: #f3f4f6;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.3s;
+}
+.rating-option:hover { background: #e5e7eb; }
+.rating-option input[type="radio"] { cursor: pointer; }
+.rating-option label { font-size: 13px; cursor: pointer; }
+
+.score-badge {
+  display: inline-block;
+  padding: 4px 10px;
+  border-radius: 12px;
+  font-size: 12px;
+  font-weight: bold;
+}
+.score-excellent { background: #d1fae5; color: #065f46; }
+.score-good { background: #dbeafe; color: #1e40af; }
+.score-fair { background: #fef3c7; color: #92400e; }
+.score-poor { background: #fee2e2; color: #991b1b; }
+
+.btn {
+  padding: 12px 24px;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: 600;
+  transition: all 0.3s;
+  margin: 5px;
+}
+.btn-primary { background: linear-gradient(135deg, #667eea, #764ba2); color: white; }
+.btn-success { background: #10b981; color: white; }
+.btn-warning { background: #f59e0b; color: white; }
+.btn-danger { background: #ef4444; color: white; }
+.btn-info { background: #3b82f6; color: white; }
+.btn:hover { opacity: 0.9; transform: translateY(-2px); }
+
+.summary-box {
+  background: linear-gradient(135deg, #ecfdf5, #d1fae5);
+  border: 2px solid #10b981;
+  padding: 20px;
+  border-radius: 12px;
+  margin-top: 20px;
+}
+.summary-box h3 { color: #065f46; margin-bottom: 15px; }
+
+@media print {
+  body { background: white; }
+  .no-print { display: none !important; }
+  .card { box-shadow: none; break-inside: avoid; }
+  .header { background: #667eea !important; -webkit-print-color-adjust: exact; }
+}
+@media (max-width: 768px) {
+  .form-row { grid-template-columns: 1fr; }
+  table { font-size: 11px; }
+  table th, table td { padding: 8px; }
+}
+</style>
+</head>
+<body>
+
+<div class="container">
+  <div class="header">
+    <h1>📋 INSTRUMEN PEMANTAUAN PELAKSANAAN MPLS 2026</h1>
+    <p>SMP KOTA KEDIRI | Berdasarkan Permendikdasmen No. 12 Tahun 2026</p>
+    <p style="margin-top:8px;">Pengawas Profesional SMP Kota Kediri</p>
+  </div>
+
+  <!-- IDENTITAS -->
+  <div class="card">
+    <h2>A. IDENTITAS PEMANTAUAN</h2>
+    <div class="form-row">
+      <div class="form-group">
+        <label>Nama Sekolah *</label>
+        <select id="sekolah" required>
+          <option value="">-- Pilih Sekolah --</option>
+          <option value="SMPN 7">SMPN 7 Kediri</option>
+          <option value="SMPN 9">SMPN 9 Kediri</option>
+          <option value="SMP Alhuda">SMP Alhuda</option>
+          <option value="SMP Plus Arahman">SMP Plus Arahman</option>
+          <option value="SMP YBPK">SMP YBPK</option>
+          <option value="SMP Santa Maria">SMP Santa Maria</option>
+          <option value="SMP Arisalah">SMP Arisalah</option>
+          <option value="SMP Hasanudin">SMP Hasanudin</option>
+          <option value="SMP Plus Darusalam">SMP Plus Darusalam</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label>Tanggal Pemantauan *</label>
+        <input type="date" id="tanggalPemantauan" required>
+      </div>
+      <div class="form-group">
+        <label>Nama Pengawas *</label>
+        <input type="text" id="namaPengawas" placeholder="Nama lengkap pengawas" required>
+      </div>
+    </div>
+    <div class="form-row">
+      <div class="form-group">
+        <label>Hari MPLS yang Dipantau</label>
+        <select id="hariMpls">
+          <option value="Hari 1 - Senin, 13 Juni 2026">Hari 1 - Senin, 13 Juni 2026</option>
+          <option value="Hari 2 - Selasa, 14 Juni 2026">Hari 2 - Selasa, 14 Juni 2026</option>
+          <option value="Hari 3 - Rabu, 15 Juni 2026">Hari 3 - Rabu, 15 Juni 2026</option>
+          <option value="Hari 4 - Kamis, 16 Juni 2026">Hari 4 - Kamis, 16 Juni 2026</option>
+          <option value="Hari 5 - Jumat, 17 Juni 2026">Hari 5 - Jumat, 17 Juni 2026</option>
+          <option value="Seluruh Hari (13-17 Juni)">Seluruh Hari (13-17 Juni)</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label>Jumlah Siswa Baru</label>
+        <input type="number" id="jumlahSiswa" placeholder="Jumlah peserta MPLS" min="0">
+      </div>
+      <div class="form-group">
+        <label>Nama Kepala Sekolah</label>
+        <input type="text" id="kepalaSekolah" placeholder="Nama kepala sekolah">
+      </div>
+    </div>
+  </div>
+
+  <!-- B. KELAYAKAN PANITIA & NARASUMBER -->
+  <div class="card">
+    <h2>B. KELAYAKAN PANITIA DAN NARASUMBER</h2>
+    
+    <div class="form-section">
+      <h3>B1. Struktur Panitia MPLS</h3>
+      <table>
+        <thead>
+          <tr>
+            <th style="width:40%;">Aspek yang Dinilai</th>
+            <th style="width:15%;">Ada/Tidak</th>
+            <th style="width:45%;">Keterangan</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Surat Keputusan Panitia MPLS</td>
+            <td>
+              <select class="ada-tidak">
+                <option value="">Pilih</option>
+                <option value="Ada">Ada</option>
+                <option value="Tidak">Tidak</option>
+              </select>
+            </td>
+            <td><input type="text" placeholder="Catatan..."></td>
+          </tr>
+          <tr>
+            <td>Ketua Panitia (Guru senior/berpengalaman)</td>
+            <td>
+              <select class="ada-tidak">
+                <option value="">Pilih</option>
+                <option value="Ada">Ada</option>
+                <option value="Tidak">Tidak</option>
+              </select>
+            </td>
+            <td><input type="text" placeholder="Catatan..."></td>
+          </tr>
+          <tr>
+            <td>Sekretaris dan Bendahara</td>
+            <td>
+              <select class="ada-tidak">
+                <option value="">Pilih</option>
+                <option value="Ada">Ada</option>
+                <option value="Tidak">Tidak</option>
+              </select>
+            </td>
+            <td><input type="text" placeholder="Catatan..."></td>
+          </tr>
+          <tr>
+            <td>Seksi-seksi (Acara, Dokumentasi, Konsumsi, dll)</td>
+            <td>
+              <select class="ada-tidak">
+                <option value="">Pilih</option>
+                <option value="Ada">Ada</option>
+                <option value="Tidak">Tidak</option>
+              </select>
+            </td>
+            <td><input type="text" placeholder="Catatan..."></td>
+          </tr>
+          <tr>
+            <td>Pembina OSIS sebagai pendamping</td>
+            <td>
+              <select class="ada-tidak">
+                <option value="">Pilih</option>
+                <option value="Ada">Ada</option>
+                <option value="Tidak">Tidak</option>
+              </select>
+            </td>
+            <td><input type="text" placeholder="Catatan..."></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="form-section">
+      <h3>B2. Kualifikasi Narasumber/Fasilitator</h3>
+      <table>
+        <thead>
+          <tr>
+            <th style="width:40%;">Aspek yang Dinilai</th>
+            <th style="width:15%;">Ya/Tidak</th>
+            <th style="width:45%;">Keterangan</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Narasumber memiliki kompetensi sesuai materi</td>
+            <td>
+              <select class="ya-tidak">
+                <option value="">Pilih</option>
+                <option value="Ya">Ya</option>
+                <option value="Tidak">Tidak</option>
+              </select>
+            </td>
+            <td><input type="text" placeholder="Catatan..."></td>
+          </tr>
+          <tr>
+            <td>Narasumber eksternal (Polisi/BNN/Dinas) terverifikasi</td>
+            <td>
+              <select class="ya-tidak">
+                <option value="">Pilih</option>
+                <option value="Ya">Ya</option>
+                <option value="Tidak">Tidak</option>
+                <option value="N/A">N/A</option>
+              </select>
+            </td>
+            <td><input type="text" placeholder="Catatan..."></td>
+          </tr>
+          <tr>
+            <td>Rasio fasilitator : siswa memadai (min 1:30)</td>
+            <td>
+              <select class="ya-tidak">
+                <option value="">Pilih</option>
+                <option value="Ya">Ya</option>
+                <option value="Tidak">Tidak</option>
+              </select>
+            </td>
+            <td><input type="text" placeholder="Catatan..."></td>
+          </tr>
+          <tr>
+            <td>Pelatih/guru pembimbing telah mendapat briefing</td>
+            <td>
+              <select class="ya-tidak">
+                <option value="">Pilih</option>
+                <option value="Ya">Ya</option>
+                <option value="Tidak">Tidak</option>
+              </select>
+            </td>
+            <td><input type="text" placeholder="Catatan..."></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- C. KELENGKAPAN DOKUMEN PERENCANAAN -->
+  <div class="card">
+    <h2>C. KELENGKAPAN DOKUMEN PERENCANAAN</h2>
+    
+    <div class="form-section">
+      <h3>C1. Dokumen Pendukung MPLS</h3>
+      <table>
+        <thead>
+          <tr>
+            <th style="width:45%;">Dokumen</th>
+            <th style="width:15%;">Ada/Tidak</th>
+            <th style="width:15%;">Lengkap/Partial</th>
+            <th style="width:25%;">Keterangan</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Jadwal Kegiatan MPLS (5 hari)</td>
+            <td>
+              <select class="ada-tidak">
+                <option value="">Pilih</option>
+                <option value="Ada">Ada</option>
+                <option value="Tidak">Tidak</option>
+              </select>
+            </td>
+            <td>
+              <select class="kelengkapan">
+                <option value="">Pilih</option>
+                <option value="Lengkap">Lengkap</option>
+                <option value="Partial">Partial</option>
+              </select>
+            </td>
+            <td><input type="text" placeholder="Catatan..."></td>
+          </tr>
+          <tr>
+            <td>Rencana Pelaksanaan Harian (RPH) per materi</td>
+            <td>
+              <select class="ada-tidak">
+                <option value="">Pilih</option>
+                <option value="Ada">Ada</option>
+                <option value="Tidak">Tidak</option>
+              </select>
+            </td>
+            <td>
+              <select class="kelengkapan">
+                <option value="">Pilih</option>
+                <option value="Lengkap">Lengkap</option>
+                <option value="Partial">Partial</option>
+              </select>
+            </td>
+            <td><input type="text" placeholder="Catatan..."></td>
+          </tr>
+          <tr>
+            <td>Materi presentasi/handout untuk siswa</td>
+            <td>
+              <select class="ada-tidak">
+                <option value="">Pilih</option>
+                <option value="Ada">Ada</option>
+                <option value="Tidak">Tidak</option>
+              </select>
+            </td>
+            <td>
+              <select class="kelengkapan">
+                <option value="">Pilih</option>
+                <option value="Lengkap">Lengkap</option>
+                <option value="Partial">Partial</option>
+              </select>
+            </td>
+            <td><input type="text" placeholder="Catatan..."></td>
+          </tr>
+          <tr>
+            <td>Daftar hadir siswa dan narasumber</td>
+            <td>
+              <select class="ada-tidak">
+                <option value="">Pilih</option>
+                <option value="Ada">Ada</option>
+                <option value="Tidak">Tidak</option>
+              </select>
+            </td>
+            <td>
+              <select class="kelengkapan">
+                <option value="">Pilih</option>
+                <option value="Lengkap">Lengkap</option>
+                <option value="Partial">Partial</option>
+              </select>
+            </td>
+            <td><input type="text" placeholder="Catatan..."></td>
+          </tr>
+          <tr>
+            <td>Izin orang tua/wali murid</td>
+            <td>
+              <select class="ada-tidak">
+                <option value="">Pilih</option>
+                <option value="Ada">Ada</option>
+                <option value="Tidak">Tidak</option>
+              </select>
+            </td>
+            <td>
+              <select class="kelengkapan">
+                <option value="">Pilih</option>
+                <option value="Lengkap">Lengkap</option>
+                <option value="Partial">Partial</option>
+              </select>
+            </td>
+            <td><input type="text" placeholder="Catatan..."></td>
+          </tr>
+          <tr>
+            <td>Dokumentasi foto/video kegiatan</td>
+            <td>
+              <select class="ada-tidak">
+                <option value="">Pilih</option>
+                <option value="Ada">Ada</option>
+                <option value="Tidak">Tidak</option>
+              </select>
+            </td>
+            <td>
+              <select class="kelengkapan">
+                <option value="">Pilih</option>
+                <option value="Lengkap">Lengkap</option>
+                <option value="Partial">Partial</option>
+              </select>
+            </td>
+            <td><input type="text" placeholder="Catatan..."></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- D. PELAKSANAAN MATERI MPLS -->
+  <div class="card">
+    <h2>D. PELAKSANAAN MATERI MPLS (12 Materi Wajib)</h2>
+    
+    <div class="alert alert-info" style="background:#dbeafe;padding:15px;border-radius:8px;margin-bottom:20px;border-left:4px solid #3b82f6;">
+      <strong>Petunjuk Penilaian:</strong><br>
+      • <strong>4 = Sangat Baik:</strong> Materi dilaksanakan lengkap, interaktif, dan bermakna<br>
+      • <strong>3 = Baik:</strong> Materi dilaksanakan dengan baik, ada interaksi<br>
+      • <strong>2 = Cukup:</strong> Materi dilaksanakan namun kurang interaktif<br>
+      • <strong>1 = Kurang:</strong> Materi tidak dilaksanakan atau sangat minimal
+    </div>
+
+    <table>
+      <thead>
+        <tr>
+          <th style="width:5%;">No</th>
+          <th style="width:8%;">Kode</th>
+          <th style="width:30%;">Materi MPLS</th>
+          <th style="width:10%;">Nilai (1-4)</th>
+          <th style="width:12%;">Terlaksana</th>
+          <th style="width:35%;">Catatan Observasi</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr style="background:#f3f4f6;">
+          <td colspan="6"><strong>A. MATERI UTAMA (WAJIB)</strong></td>
+        </tr>
+        <tr>
+          <td>1</td>
+          <td><strong>A1</strong></td>
+          <td>Gerakan Tujuh Kebiasaan Anak Indonesia Hebat</td>
+          <td>
+            <select class="nilai-materi" data-kode="A1">
+              <option value="">-</option>
+              <option value="4">4 - Sangat Baik</option>
+              <option value="3">3 - Baik</option>
+              <option value="2">2 - Cukup</option>
+              <option value="1">1 - Kurang</option>
+            </select>
+          </td>
+          <td>
+            <select class="terlaksana">
+              <option value="">Pilih</option>
+              <option value="Ya">Ya</option>
+              <option value="Tidak">Tidak</option>
+              <option value="Sebagian">Sebagian</option>
+            </select>
+          </td>
+          <td><textarea rows="2" placeholder="Catatan observasi..."></textarea></td>
+        </tr>
+        <tr>
+          <td>2</td>
+          <td><strong>A2</strong></td>
+          <td>Pagi Ceria (Aktivitas fisik/penyemangat pagi)</td>
+          <td>
+            <select class="nilai-materi" data-kode="A2">
+              <option value="">-</option>
+              <option value="4">4 - Sangat Baik</option>
+              <option value="3">3 - Baik</option>
+              <option value="2">2 - Cukup</option>
+              <option value="1">1 - Kurang</option>
+            </select>
+          </td>
+          <td>
+            <select class="terlaksana">
+              <option value="">Pilih</option>
+              <option value="Ya">Ya</option>
+              <option value="Tidak">Tidak</option>
+              <option value="Sebagian">Sebagian</option>
+            </select>
+          </td>
+          <td><textarea rows="2" placeholder="Catatan observasi..."></textarea></td>
+        </tr>
+        <tr>
+          <td>3</td>
+          <td><strong>A3</strong></td>
+          <td>Budaya 5S (Senyum, Salam, Sapa, Sopan, Santun)</td>
+          <td>
+            <select class="nilai-materi" data-kode="A3">
+              <option value="">-</option>
+              <option value="4">4 - Sangat Baik</option>
+              <option value="3">3 - Baik</option>
+              <option value="2">2 - Cukup</option>
+              <option value="1">1 - Kurang</option>
+            </select>
+          </td>
+          <td>
+            <select class="terlaksana">
+              <option value="">Pilih</option>
+              <option value="Ya">Ya</option>
+              <option value="Tidak">Tidak</option>
+              <option value="Sebagian">Sebagian</option>
+            </select>
+          </td>
+          <td><textarea rows="2" placeholder="Catatan observasi..."></textarea></td>
+        </tr>
+        <tr>
+          <td>4</td>
+          <td><strong>A4</strong></td>
+          <td>Sopan Santun Bermedia Sosial (Etika Digital)</td>
+          <td>
+            <select class="nilai-materi" data-kode="A4">
+              <option value="">-</option>
+              <option value="4">4 - Sangat Baik</option>
+              <option value="3">3 - Baik</option>
+              <option value="2">2 - Cukup</option>
+              <option value="1">1 - Kurang</option>
+            </select>
+          </td>
+          <td>
+            <select class="terlaksana">
+              <option value="">Pilih</option>
+              <option value="Ya">Ya</option>
+              <option value="Tidak">Tidak</option>
+              <option value="Sebagian">Sebagian</option>
+            </select>
+          </td>
+          <td><textarea rows="2" placeholder="Catatan observasi..."></textarea></td>
+        </tr>
+
+        <tr style="background:#f3f4f6;">
+          <td colspan="6"><strong>B. PENGENALAN LINGKUNGAN & KURIKULUM</strong></td>
+        </tr>
+        <tr>
+          <td>5</td>
+          <td><strong>B1</strong></td>
+          <td>Wawasan Wiyata Mandala</td>
+          <td>
+            <select class="nilai-materi" data-kode="B1">
+              <option value="">-</option>
+              <option value="4">4 - Sangat Baik</option>
+              <option value="3">3 - Baik</option>
+              <option value="2">2 - Cukup</option>
+              <option value="1">1 - Kurang</option>
+            </select>
+          </td>
+          <td>
+            <select class="terlaksana">
+              <option value="">Pilih</option>
+              <option value="Ya">Ya</option>
+              <option value="Tidak">Tidak</option>
+              <option value="Sebagian">Sebagian</option>
+            </select>
+          </td>
+          <td><textarea rows="2" placeholder="Catatan observasi..."></textarea></td>
+        </tr>
+        <tr>
+          <td>6</td>
+          <td><strong>B2</strong></td>
+          <td>Pengenalan Kurikulum Merdeka</td>
+          <td>
+            <select class="nilai-materi" data-kode="B2">
+              <option value="">-</option>
+              <option value="4">4 - Sangat Baik</option>
+              <option value="3">3 - Baik</option>
+              <option value="2">2 - Cukup</option>
+              <option value="1">1 - Kurang</option>
+            </select>
+          </td>
+          <td>
+            <select class="terlaksana">
+              <option value="">Pilih</option>
+              <option value="Ya">Ya</option>
+              <option value="Tidak">Tidak</option>
+              <option value="Sebagian">Sebagian</option>
+            </select>
+          </td>
+          <td><textarea rows="2" placeholder="Catatan observasi..."></textarea></td>
+        </tr>
+        <tr>
+          <td>7</td>
+          <td><strong>B3</strong></td>
+          <td>Tata Krama dan Tata Tertib Sekolah</td>
+          <td>
+            <select class="nilai-materi" data-kode="B3">
+              <option value="">-</option>
+              <option value="4">4 - Sangat Baik</option>
+              <option value="3">3 - Baik</option>
+              <option value="2">2 - Cukup</option>
+              <option value="1">1 - Kurang</option>
+            </select>
+          </td>
+          <td>
+            <select class="terlaksana">
+              <option value="">Pilih</option>
+              <option value="Ya">Ya</option>
+              <option value="Tidak">Tidak</option>
+              <option value="Sebagian">Sebagian</option>
+            </select>
+          </td>
+          <td><textarea rows="2" placeholder="Catatan observasi..."></textarea></td>
+        </tr>
+
+        <tr style="background:#f3f4f6;">
+          <td colspan="6"><strong>C. PENDIDIKAN KARAKTER & POTENSI DIRI</strong></td>
+        </tr>
+        <tr>
+          <td>8</td>
+          <td><strong>C1</strong></td>
+          <td>Cara Belajar Efektif</td>
+          <td>
+            <select class="nilai-materi" data-kode="C1">
+              <option value="">-</option>
+              <option value="4">4 - Sangat Baik</option>
+              <option value="3">3 - Baik</option>
+              <option value="2">2 - Cukup</option>
+              <option value="1">1 - Kurang</option>
+            </select>
+          </td>
+          <td>
+            <select class="terlaksana">
+              <option value="">Pilih</option>
+              <option value="Ya">Ya</option>
+              <option value="Tidak">Tidak</option>
+              <option value="Sebagian">Sebagian</option>
+            </select>
+          </td>
+          <td><textarea rows="2" placeholder="Catatan observasi..."></textarea></td>
+        </tr>
+        <tr>
+          <td>9</td>
+          <td><strong>C2</strong></td>
+          <td>Budaya Lokal & Wawasan Kebangsaan</td>
+          <td>
+            <select class="nilai-materi" data-kode="C2">
+              <option value="">-</option>
+              <option value="4">4 - Sangat Baik</option>
+              <option value="3">3 - Baik</option>
+              <option value="2">2 - Cukup</option>
+              <option value="1">1 - Kurang</option>
+            </select>
+          </td>
+          <td>
+            <select class="terlaksana">
+              <option value="">Pilih</option>
+              <option value="Ya">Ya</option>
+              <option value="Tidak">Tidak</option>
+              <option value="Sebagian">Sebagian</option>
+            </select>
+          </td>
+          <td><textarea rows="2" placeholder="Catatan observasi..."></textarea></td>
+        </tr>
+        <tr>
+          <td>10</td>
+          <td><strong>C3</strong></td>
+          <td>Pencegahan Bahaya Sosial (Bullying, Judi Online, NAPZA, Pergaulan Bebas)</td>
+          <td>
+            <select class="nilai-materi" data-kode="C3">
+              <option value="">-</option>
+              <option value="4">4 - Sangat Baik</option>
+              <option value="3">3 - Baik</option>
+              <option value="2">2 - Cukup</option>
+              <option value="1">1 - Kurang</option>
+            </select>
+          </td>
+          <td>
+            <select class="terlaksana">
+              <option value="">Pilih</option>
+              <option value="Ya">Ya</option>
+              <option value="Tidak">Tidak</option>
+              <option value="Sebagian">Sebagian</option>
+            </select>
+          </td>
+          <td><textarea rows="2" placeholder="Catatan observasi..."></textarea></td>
+        </tr>
+
+        <tr style="background:#f3f4f6;">
+          <td colspan="6"><strong>D. KEGIATAN KESISWAAN</strong></td>
+        </tr>
+        <tr>
+          <td>11</td>
+          <td><strong>D1</strong></td>
+          <td>Pengenalan Ekstrakurikuler</td>
+          <td>
+            <select class="nilai-materi" data-kode="D1">
+              <option value="">-</option>
+              <option value="4">4 - Sangat Baik</option>
+              <option value="3">3 - Baik</option>
+              <option value="2">2 - Cukup</option>
+              <option value="1">1 - Kurang</option>
+            </select>
+          </td>
+          <td>
+            <select class="terlaksana">
+              <option value="">Pilih</option>
+              <option value="Ya">Ya</option>
+              <option value="Tidak">Tidak</option>
+              <option value="Sebagian">Sebagian</option>
+            </select>
+          </td>
+          <td><textarea rows="2" placeholder="Catatan observasi..."></textarea></td>
+        </tr>
+        <tr>
+          <td>12</td>
+          <td><strong>D2</strong></td>
+          <td>Pengenalan Organisasi (OSIS)</td>
+          <td>
+            <select class="nilai-materi" data-kode="D2">
+              <option value="">-</option>
+              <option value="4">4 - Sangat Baik</option>
+              <option value="3">3 - Baik</option>
+              <option value="2">2 - Cukup</option>
+              <option value="1">1 - Kurang</option>
+            </select>
+          </td>
+          <td>
+            <select class="terlaksana">
+              <option value="">Pilih</option>
+              <option value="Ya">Ya</option>
+              <option value="Tidak">Tidak</option>
+              <option value="Sebagian">Sebagian</option>
+            </select>
+          </td>
+          <td><textarea rows="2" placeholder="Catatan observasi..."></textarea></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- E. ASPEK PELAKSANAAN -->
+  <div class="card">
+    <h2>E. PENILAIAN ASPEK PELAKSANAAN</h2>
+    
+    <div class="form-section">
+      <h3>E1. Metode dan Pendekatan Pembelajaran</h3>
+      <table>
+        <thead>
+          <tr>
+            <th style="width:45%;">Indikator</th>
+            <th style="width:15%;">Skor (1-4)</th>
+            <th style="width:40%;">Catatan</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Menggunakan metode aktif dan partisipatif</td>
+            <td>
+              <select class="nilai-aspek">
+                <option value="">-</option>
+                <option value="4">4</option>
+                <option value="3">3</option>
+                <option value="2">2</option>
+                <option value="1">1</option>
+              </select>
+            </td>
+            <td><input type="text" placeholder="Contoh: diskusi, role play, praktik"></td>
+          </tr>
+          <tr>
+            <td>Kegiatan menyenangkan dan tidak membosankan</td>
+            <td>
+              <select class="nilai-aspek">
+                <option value="">-</option>
+                <option value="4">4</option>
+                <option value="3">3</option>
+                <option value="2">2</option>
+                <option value="1">1</option>
+              </select>
+            </td>
+            <td><input type="text" placeholder="Catatan..."></td>
+          </tr>
+          <tr>
+            <td>Adanya variasi metode (ceramah, diskusi, praktik, outbound)</td>
+            <td>
+              <select class="nilai-aspek">
+                <option value="">-</option>
+                <option value="4">4</option>
+                <option value="3">3</option>
+                <option value="2">2</option>
+                <option value="1">1</option>
+              </select>
+            </td>
+            <td><input type="text" placeholder="Catatan..."></td>
+          </tr>
+          <tr>
+            <td>Pemanfaatan media pembelajaran yang menarik</td>
+            <td>
+              <select class="nilai-aspek">
+                <option value="">-</option>
+                <option value="4">4</option>
+                <option value="3">3</option>
+                <option value="2">2</option>
+                <option value="1">1</option>
+              </select>
+            </td>
+            <td><input type="text" placeholder="Catatan..."></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="form-section">
+      <h3>E2. Partisipasi dan Antusiasme Siswa</h3>
+      <table>
+        <thead>
+          <tr>
+            <th style="width:45%;">Indikator</th>
+            <th style="width:15%;">Skor (1-4)</th>
+            <th style="width:40%;">Catatan</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Siswa aktif berpartisipasi dalam kegiatan</td>
+            <td>
+              <select class="nilai-aspek">
+                <option value="">-</option>
+                <option value="4">4</option>
+                <option value="3">3</option>
+                <option value="2">2</option>
+                <option value="1">1</option>
+              </select>
+            </td>
+            <td><input type="text" placeholder="% siswa yang aktif"></td>
+          </tr>
+          <tr>
+            <td>Siswa menunjukkan antusiasme dan semangat</td>
+            <td>
+              <select class="nilai-aspek">
+                <option value="">-</option>
+                <option value="4">4</option>
+                <option value="3">3</option>
+                <option value="2">2</option>
+                <option value="1">1</option>
+              </select>
+            </td>
+            <td><input type="text" placeholder="Catatan..."></td>
+          </tr>
+          <tr>
+            <td>Interaksi positif antar siswa dan dengan fasilitator</td>
+            <td>
+              <select class="nilai-aspek">
+                <option value="">-</option>
+                <option value="4">4</option>
+                <option value="3">3</option>
+                <option value="2">2</option>
+                <option value="1">1</option>
+              </select>
+            </td>
+            <td><input type="text" placeholder="Catatan..."></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="form-section">
+      <h3>E3. Kesesuaian Waktu dan Jadwal</h3>
+      <table>
+        <thead>
+          <tr>
+            <th style="width:45%;">Indikator</th>
+            <th style="width:15%;">Ya/Tidak</th>
+            <th style="width:40%;">Keterangan</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Kegiatan dimulai tepat waktu</td>
+            <td>
+              <select class="ya-tidak">
+                <option value="">Pilih</option>
+                <option value="Ya">Ya</option>
+                <option value="Tidak">Tidak</option>
+              </select>
+            </td>
+            <td><input type="text" placeholder="Keterlambatan (jika ada)"></td>
+          </tr>
+          <tr>
+            <td>Alokasi waktu sesuai dengan rencana</td>
+            <td>
+              <select class="ya-tidak">
+                <option value="">Pilih</option>
+                <option value="Ya">Ya</option>
+                <option value="Tidak">Tidak</option>
+              </select>
+            </td>
+            <td><input type="text" placeholder="Catatan..."></td>
+          </tr>
+          <tr>
+            <td>Ada waktu istirahat yang cukup</td>
+            <td>
+              <select class="ya-tidak">
+                <option value="">Pilih</option>
+                <option value="Ya">Ya</option>
+                <option value="Tidak">Tidak</option>
+              </select>
+            </td>
+            <td><input type="text" placeholder="Durasi istirahat"></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="form-section">
+      <h3>E4. Keamanan dan Kenyamanan</h3>
+      <table>
+        <thead>
+          <tr>
+            <th style="width:45%;">Indikator</th>
+            <th style="width:15%;">Ya/Tidak</th>
+            <th style="width:40%;">Keterangan</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Tidak ada unsur perpeloncoan/kekerasan</td>
+            <td>
+              <select class="ya-tidak" required>
+                <option value="">Pilih</option>
+                <option value="Ya">Ya</option>
+                <option value="Tidak">Tidak</option>
+              </select>
+            </td>
+            <td><input type="text" placeholder="WAJIB: Ya"></td>
+          </tr>
+          <tr>
+            <td>Fasilitas dan lokasi kegiatan aman</td>
+            <td>
+              <select class="ya-tidak">
+                <option value="">Pilih</option>
+                <option value="Ya">Ya</option>
+                <option value="Tidak">Tidak</option>
+              </select>
+            </td>
+            <td><input type="text" placeholder="Catatan keamanan"></td>
+          </tr>
+          <tr>
+            <td>Tersedia P3K dan tenaga medis siaga</td>
+            <td>
+              <select class="ya-tidak">
+                <option value="">Pilih</option>
+                <option value="Ya">Ya</option>
+                <option value="Tidak">Tidak</option>
+              </select>
+            </td>
+            <td><input type="text" placeholder="Catatan..."></td>
+          </tr>
+          <tr>
+            <td>Konsumsi dan akomodasi memadai</td>
+            <td>
+              <select class="ya-tidak">
+                <option value="">Pilih</option>
+                <option value="Ya">Ya</option>
+                <option value="Tidak">Tidak</option>
+              </select>
+            </td>
+            <td><input type="text" placeholder="Catatan..."></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- F. TEMUAN DAN REKOMENDASI -->
+  <div class="card">
+    <h2>F. TEMUAN, KELEBIHAN, DAN REKOMENDASI</h2>
+    
+    <div class="form-section">
+      <h3>F1. Kelebihan/Kekuatan Pelaksanaan MPLS</h3>
+      <div class="form-group">
+        <textarea id="kelebihan" rows="4" placeholder="Tuliskan kelebihan/kekuatan yang ditemukan selama pemantauan MPLS..."></textarea>
+      </div>
+    </div>
+
+    <div class="form-section">
+      <h3>F2. Kekurangan/Hambatan yang Ditemukan</h3>
+      <div class="form-group">
+        <textarea id="kekurangan" rows="4" placeholder="Tuliskan kekurangan/hambatan yang perlu diperbaiki..."></textarea>
+      </div>
+    </div>
+
+    <div class="form-section">
+      <h3>F3. Rekomendasi Perbaikan</h3>
+      <div class="form-group">
+        <textarea id="rekomendasi" rows="4" placeholder="Tuliskan rekomendasi tindak lanjut untuk perbaikan MPLS..."></textarea>
+      </div>
+    </div>
+
+    <div class="form-section">
+      <h3>F4. Tindak Lanjut</h3>
+      <div class="checkbox-group">
+        <input type="checkbox" id="tl1">
+        <label for="tl1">Perlu monitoring ulang</label>
+      </div>
+      <div class="checkbox-group">
+        <input type="checkbox" id="tl2">
+        <label for="tl2">Perlu pembinaan khusus</label>
+      </div>
+      <div class="checkbox-group">
+        <input type="checkbox" id="tl3">
+        <label for="tl3">Perlu surat teguran/peringatan</label>
+      </div>
+      <div class="checkbox-group">
+        <input type="checkbox" id="tl4">
+        <label for="tl4">Sudah memenuhi standar (tidak perlu TL)</label>
+      </div>
+      <div class="form-group" style="margin-top:15px;">
+        <label>Keterangan Tindak Lanjut Lainnya:</label>
+        <textarea id="keteranganTL" rows="3" placeholder="Jelaskan tindak lanjut yang diperlukan..."></textarea>
+      </div>
+    </div>
+  </div>
+
+  <!-- G. PENILAIAN AKHIR -->
+  <div class="card">
+    <h2>G. PENILAIAN AKHIR DAN KESIMPULAN</h2>
+    
+    <div class="form-section">
+      <h3>G1. Rekapitulasi Nilai</h3>
+      <table>
+        <thead>
+          <tr>
+            <th>Komponen</th>
+            <th>Bobot</th>
+            <th>Nilai Rata-rata</th>
+            <th>Nilai Akhir</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Kelengkapan Dokumen Perencanaan</td>
+            <td>20%</td>
+            <td><input type="number" id="nilaiDokumen" min="1" max="4" step="0.1" placeholder="1-4"></td>
+            <td id="akhirDokumen">-</td>
+          </tr>
+          <tr>
+            <td>Pelaksanaan 12 Materi MPLS</td>
+            <td>40%</td>
+            <td><input type="number" id="nilaiMateri" min="1" max="4" step="0.1" placeholder="1-4"></td>
+            <td id="akhirMateri">-</td>
+          </tr>
+          <tr>
+            <td>Aspek Pelaksanaan (Metode, Partisipasi, dll)</td>
+            <td>30%</td>
+            <td><input type="number" id="nilaiAspek" min="1" max="4" step="0.1" placeholder="1-4"></td>
+            <td id="akhirAspek">-</td>
+          </tr>
+          <tr>
+            <td>Keamanan dan Kepatuhan Regulasi</td>
+            <td>10%</td>
+            <td><input type="number" id="nilaiKeamanan" min="1" max="4" step="0.1" placeholder="1-4"></td>
+            <td id="akhirKeamanan">-</td>
+          </tr>
+          <tr style="background:#f3f4f6;font-weight:bold;">
+            <td colspan="3">NILAI AKHIR TOTAL</td>
+            <td id="nilaiTotal" style="font-size:18px;color:#667eea;">-</td>
+          </tr>
+        </tbody>
+      </table>
+      
+      <div style="margin-top:15px;padding:15px;background:#fef3c7;border-radius:8px;">
+        <strong>Kategori Penilaian:</strong><br>
+        • <span class="score-badge score-excellent">85-100 = Sangat Baik (A)</span><br>
+        • <span class="score-badge score-good">70-84 = Baik (B)</span><br>
+        • <span class="score-badge score-fair">55-69 = Cukup (C)</span><br>
+        • <span class="score-badge score-poor">< 55 = Kurang (D)</span>
+      </div>
+    </div>
+
+    <div class="form-section">
+      <h3>G2. Kesimpulan Akhir</h3>
+      <div class="form-group">
+        <label>Status Pelaksanaan MPLS:</label>
+        <select id="statusAkhir" style="font-size:14px;padding:10px;">
+          <option value="">-- Pilih Status --</option>
+          <option value="Sangat Baik">✅ Sangat Baik - Memenuhi Semua Standar</option>
+          <option value="Baik">✓ Baik - Memenuhi Standar dengan Catatan Minor</option>
+          <option value="Cukup">⚠️ Cukup - Perlu Perbaikan Beberapa Aspek</option>
+          <option value="Kurang">❌ Kurang - Perlu Perbaikan Signifikan</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label>Kesimpulan Umum:</label>
+        <textarea id="kesimpulan" rows="4" placeholder="Tuliskan kesimpulan akhir pemantauan..."></textarea>
+      </div>
+    </div>
+  </div>
+
+  <!-- H. PENGESAHAN -->
+  <div class="card">
+    <h2>H. PENGESAHAN</h2>
+    
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:30px;margin-top:20px;">
+      <div style="text-align:center;">
+        <p style="margin-bottom:60px;"><strong>Diperiksa oleh:</strong><br>Pengawas Profesional</p>
+        <p style="font-weight:bold;text-decoration:underline;" id="ttdPengawas">(........................................)</p>
+        <p>NIP. .......................................</p>
+      </div>
+      <div style="text-align:center;">
+        <p style="margin-bottom:60px;"><strong>Diketahui oleh:</strong><br>Kepala Sekolah</p>
+        <p style="font-weight:bold;text-decoration:underline;">(........................................)</p>
+        <p>NIP. .......................................</p>
+      </div>
+    </div>
+    
+    <div style="margin-top:30px;text-align:center;">
+      <p>Kediri, <span id="tglPengesahan"></span></p>
+    </div>
+  </div>
+
+  <!-- BUTTONS -->
+  <div class="no-print" style="text-align:center;margin:30px 0;">
+    <button class="btn btn-primary" onclick="hitungNilai()">🔢 Hitung Nilai Otomatis</button>
+    <button class="btn btn-success" onclick="simpanData()">💾 Simpan Data</button>
+    <button class="btn btn-info" onclick="window.print()">🖨️ Cetak / PDF</button>
+    <button class="btn btn-warning" onclick="exportExcel()">📊 Export Excel</button>
+    <button class="btn btn-danger" onclick="resetForm()">🗑️ Reset Form</button>
+  </div>
+</div>
+
+<script>
+// Set tanggal otomatis
+document.getElementById('tanggalPemantauan').valueAsDate = new Date();
+document.getElementById('tglPengesahan').textContent = new Date().toLocaleDateString('id-ID', {day:'numeric',month:'long',year:'numeric'});
+
+// Update nama pengawas di tanda tangan
+document.getElementById('namaPengawas').addEventListener('input', function() {
+  document.getElementById('ttdPengawas').textContent = this.value ? '(' + this.value + ')' : '(........................................)';
+});
+
+// Hitung nilai otomatis
+function hitungNilai() {
+  // Ambil nilai dari input
+  const nDokumen = parseFloat(document.getElementById('nilaiDokumen').value) || 0;
+  const nMateri = parseFloat(document.getElementById('nilaiMateri').value) || 0;
+  const nAspek = parseFloat(document.getElementById('nilaiAspek').value) || 0;
+  const nKeamanan = parseFloat(document.getElementById('nilaiKeamanan').value) || 0;
+  
+  // Hitung nilai akhir (skala 1-4 dikonversi ke 100)
+  const akhirDok = (nDokumen * 20).toFixed(1);
+  const akhirMat = (nMateri * 10).toFixed(1);
+  const akhirAsp = (nAspek * 7.5).toFixed(1);
+  const akhirAman = (nKeamanan * 2.5).toFixed(1);
+  
+  document.getElementById('akhirDokumen').textContent = akhirDok;
+  document.getElementById('akhirMateri').textContent = akhirMat;
+  document.getElementById('akhirAspek').textContent = akhirAsp;
+  document.getElementById('akhirKeamanan').textContent = akhirAman;
+  
+  const total = (parseFloat(akhirDok) + parseFloat(akhirMat) + parseFloat(akhirAsp) + parseFloat(akhirAman)).toFixed(1);
+  document.getElementById('nilaiTotal').textContent = total;
+  
+  // Tentukan kategori
+  let kategori = '';
+  if (total >= 85) kategori = 'Sangat Baik (A)';
+  else if (total >= 70) kategori = 'Baik (B)';
+  else if (total >= 55) kategori = 'Cukup (C)';
+  else kategori = 'Kurang (D)';
+  
+  alert(`Nilai Akhir: ${total}\nKategori: ${kategori}`);
+}
+
+// Simpan data ke localStorage
+function simpanData() {
+  const data = {
+    sekolah: document.getElementById('sekolah').value,
+    tanggal: document.getElementById('tanggalPemantauan').value,
+    pengawas: document.getElementById('namaPengawas').value,
+    hari: document.getElementById('hariMpls').value,
+    timestamp: new Date().toISOString()
+  };
+  
+  let saved = JSON.parse(localStorage.getItem('instrumenMPLS') || '[]');
+  saved.push(data);
+  localStorage.setItem('instrumenMPLS', JSON.stringify(saved));
+  
+  alert('✅ Data berhasil disimpan!');
+}
+
+// Export ke CSV (bisa dibuka di Excel)
+function exportExcel() {
+  let csv = 'INSTRUMEN PEMANTAUAN MPLS 2026\n';
+  csv += `Sekolah,${document.getElementById('sekolah').value}\n`;
+  csv += `Tanggal,${document.getElementById('tanggalPemantauan').value}\n`;
+  csv += `Pengawas,${document.getElementById('namaPengawas').value}\n\n`;
+  
+  csv += 'KODE,MATERI,NILAI,TERLAKSANA,CATATAN\n';
+  document.querySelectorAll('tr').forEach(row => {
+    const cells = row.querySelectorAll('td');
+    if (cells.length >= 6) {
+      const kode = cells[1]?.textContent || '';
+      const materi = cells[2]?.textContent || '';
+      const nilaiSelect = cells[3]?.querySelector('select');
+      const terlaksanaSelect = cells[4]?.querySelector('select');
+      const catatanInput = cells[5]?.querySelector('textarea');
+      
+      if (kode && materi) {
+        csv += `${kode},"${materi}",${nilaiSelect?.value || ''},${terlaksanaSelect?.value || ''},"${catatanInput?.value || ''}"\n`;
+      }
+    }
+  });
+  
+  const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+  const link = document.createElement('a');
+  link.href = URL.createObjectURL(blob);
+  link.download = `Instrumen_MPLS_${document.getElementById('sekolah').value}_${new Date().toISOString().split('T')[0]}.csv`;
+  link.click();
+}
+
+// Reset form
+function resetForm() {
+  if (confirm('Yakin ingin mereset semua data?')) {
+    document.querySelectorAll('input, select, textarea').forEach(el => {
+      if (el.type === 'checkbox' || el.type === 'radio') {
+        el.checked = false;
+      } else {
+        el.value = '';
+      }
+    });
+    document.getElementById('tanggalPemantauan').valueAsDate = new Date();
+  }
+}
+</script>
+
+</body>
+</html>
